@@ -600,6 +600,9 @@ class TestDifferentCurrencies:
     "model_class", (AbstractModel, ModelWithNonMoneyField, InheritorModel, InheritedModel, ProxyModel)
 )
 def test_manager_instance_access(model_class):
+    if VERSION[:2] >= (3, 2) and model_class is AbstractModel:
+        # django 3.2 and later does not support AbstractModel instancing
+        return
     with pytest.raises(AttributeError):
         model_class().objects.all()
 
